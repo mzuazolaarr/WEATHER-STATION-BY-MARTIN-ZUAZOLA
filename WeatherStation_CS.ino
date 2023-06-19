@@ -8,15 +8,15 @@
 DHT dht(2, DHT11);
 LiquidCrystal lcd(12, 11, 4, 5, 6, 7);
 
-int buttonPin = 8;      // Pin del pulsador
-int buttonState = HIGH; // Estado actual del pulsador
-int lastButtonState = HIGH; // Estado previo del pulsador
-bool displayData = false; // Estado de visualización de datos
+int buttonPin = 8;      // Buttom pin
+int buttonState = HIGH; // Current status of the button
+int lastButtonState = HIGH; // Previous button status
+bool displayData = false; // Data display status
 
 char ssid[] = "vodafoneA4CA";     
 char password[] = "AGQR5MRDF2G3NM";
-char server[] = "api.thingspeak.com";  // Servidor ThingSpeak
-String apiKey = "0JYAZVYUR19R0B4G";   // Clave de escritura del canal ThingSpeak
+char server[] = "api.thingspeak.com";  // ThingSpeak Server
+String apiKey = "0JYAZVYUR19R0B4G";   // ThingSpeak Channel Write Key
 
 WiFiClient client;
 HttpClient http(client, server);
@@ -27,19 +27,19 @@ void setup() {
   dht.begin();
   lcd.begin(16, 2);
   lcd.print("Weather Station");
-  pinMode(buttonPin, INPUT_PULLUP); // Configurar el pin del pulsador como entrada con resistencia pull-up
+  pinMode(buttonPin, INPUT_PULLUP); // Configure push-button pin as input with pull-up resistor
   connectWiFi();
 }
 
 void loop() {
-  // Leer el estado del pulsador
+  // Read pushbutton status
   buttonState = digitalRead(buttonPin);
 
-  // Si hay un cambio de estado del pulsador
+  // If there is a change of status of the push button
   if (buttonState != lastButtonState) {
-    // Si se ha pulsado el botón
+    // If the button has been pressed
     if (buttonState == LOW) {
-      displayData = !displayData; // Cambiar el estado de visualización de datos
+      displayData = !displayData; // Change the data display status
       if (displayData) {
         Serial.println("ON");
       } else {
@@ -51,10 +51,10 @@ void loop() {
     }
   }
 
-  // Actualizar el estado previo del pulsador
+  // Update the previous status of the pushbutton
   lastButtonState = buttonState;
 
-  // Mostrar datos en el LCD si está habilitada la visualización
+  // Display data on the LCD if display is enabled
   if (displayData) {
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
